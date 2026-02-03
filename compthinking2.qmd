@@ -10,6 +10,7 @@ editor: visual
 ```{r}
 library(tidyverse)
 library(here)
+library(lterdatasampler)
 ```
 
 ## Q1.1
@@ -55,9 +56,117 @@ for (i in 1:length(vec)) {
 }
 ```
 
+## Q1.3
+
+Stress was measured as the glucocorticoid metabolite concentration in pika feces. The variable is called concentration_pg_m and the units are picogram.
+
+## Q 1.4
+
+Answer: Each row is a feces sample (individual pika poop)
+
+## Q 1.5
+
+```{r}
+data("nwt_pikas")
+head(nwt_pikas)
+
+nwt_pikas_categ <- nwt_pikas %>% 
+  # Call the new column stress_category
+  mutate(stress_category = case_when(
+    # When the value is > 5000, make the new column's value "Stressed!!!!"
+    concentration_pg_g > 5000 ~ "Stressed!!!!!!",
+    # Otherwise, make the new column's value "Chill"
+    .default = "Chill"
+  ))
+
+nwt_pikas_categ %>% 
+  # We're adding a little placeholder axis just so we can see the point distribution
+  ggplot(aes(x ="Placeholder", 
+             y = concentration_pg_g,
+             color=stress_category)) +
+  # Add the geom_jitter geom
+  geom_jitter(width = 0.1)
+```
+
 # Section 2
 
 ```{r}
 library(lterdatasampler)
 library(tidyverse)
+```
+
+## Q 2.1
+
+Using the knz bison dataset
+
+```{r}
+data("knz_bison")
+head(knz_bison)
+```
+
+## Q 2.2
+
+We want the for loop to plot the weight of individuals in each age class. To do this, we first will calculate the age of each animal, then for every i age group, make a ggplot. We will plot animal_weight on the y-axis, age on the x-axis, and then color by animal_sex.
+
+## Q 2.3
+
+```{r}
+# First, calculate age by subtracting year of sampling from birth year
+knz_bison2 <- knz_bison %>% 
+  mutate(age = rec_year-animal_yob)
+
+# make a vector that 
+
+# Next, write a for loop
+
+for (i in sort(unique(knz_bison2$age))) {
+  # Fetch the column names of the dataframe, store in a vector "names"
+  filt_data <- knz_bison2 %>% 
+    filter(age == i, !is.na(animal_weight))
+  
+  # plot the mean weight for each age
+  plot <- filt_data %>% 
+    ggplot(aes(x=age,
+               y= animal_weight,
+               color = animal_sex))+
+    geom_point()
+  
+  # This prints out column i
+ # print(plot)
+  print(plot)
+}
+```
+
+## Q2.4
+
+We want to see how many males at age 1 are \>500 lbs, and which are less. Those that are \>500 lbs will be labeled "beefy" and those \<500lbs will be labeled "lean". This is best done with a case_when function.
+
+First, we will filter a new dataframe for just males at age 1.
+
+## Q 2.5
+
+```{r}
+# filter a new dataset for just males at age 1
+knz_bison_males <- knz_bison2 %>% 
+  filter(animal_sex == "M",
+         age == 1)
+
+
+knz_bison_males <- knz_bison_males %>% 
+  # Call the new column stress_category
+  mutate(strength = case_when(
+    # When the value is > 500, make the new column's value "Beefy"
+    animal_weight > 500 ~ "Beefy",
+    # Otherwise, make the new column's value "Chill"
+    .default = "Lean"
+  ))
+head(knz_bison_males)
+```
+
+## Plot just for fun
+
+```{r}
+ggplot(knz_bison_males, aes(x = animal_weight, fill = strength))+
+   geom_histogram(binwidth = 20,
+                  color= "black")
 ```
