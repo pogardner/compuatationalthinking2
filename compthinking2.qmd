@@ -1,0 +1,63 @@
+---
+title: "CompThinking2"
+authors: Eric and Paige
+format: pdf
+editor: visual
+---
+
+## Load in libraries
+
+```{r}
+library(tidyverse)
+library(here)
+```
+
+## Q1.1
+
+```{r}
+x <- 11
+
+# Check if the value of x is greater than 10
+if(x > 10)
+{ 
+  # Paste takes the value stored in x and combines that with a character string
+  print(paste(x, "is greater than 10")) 
+} else
+{ 
+  print(paste(x, "is less than or equal to 10")) 
+}
+```
+
+output: "11 is greater than 10"
+
+## Q 1.2
+
+```{r}
+vec <- c(-2,42,0,10)
+# For 1 through the length of the vector "vec" 
+for (i in 1:length(vec)) {
+  
+  # check the value of using nested if-else statements
+  if (vec[i] < 0) {
+    # if the element is less than 10
+    print("value is negative")
+  } else {
+    # if the element is exactly equal to 10
+    if (vec[i] == 0) {
+      # if the element equals 10
+      print("value is equal to 0")
+    } else {
+      # if the element is greater than 10
+      print("positive")
+    }
+  }
+  
+}
+```
+
+# Section 2
+
+```{r}
+library(lterdatasampler)
+library(tidyverse)
+```
